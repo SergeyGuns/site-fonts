@@ -66,16 +66,41 @@ export default function Home() {
       "fantasy",
       "system-ui",
       "ui-serif",
-      // "ui-sans-serif",
-      // "ui-monospace",
-      // "ui-rounded",
-      // "emoji",
-      // "math",
-      // "fangsong",
+      "ui-sans-serif",
+      "ui-monospace",
+      "ui-rounded",
+      "emoji",
+      "math",
+      "fangsong",
     ];
 
     return arr;
   }
+
+  const fontWeightList = [
+    "lighter",
+    "normal",
+    "bold",
+    "bolder",
+    "100",
+    "200",
+    "300",
+    "400",
+    "500",
+    "600",
+    "700",
+    "800",
+    "900",
+    "i100",
+    "i200",
+    "i300",
+    "i400",
+    "i500",
+    "i600",
+    "i700",
+    "i800",
+    "i900",
+  ];
 
   const [overwriteState, setOverwriteState] = React.useState({});
   function overwriteFontProperty(fontName, properties) {
@@ -156,7 +181,7 @@ export default function Home() {
     setFishText(value);
   };
 
-  const [fontSize, setFontSize] = React.useState(16);
+  const [fontSize, setFontSize] = React.useState(80);
   const handleInputFontSizeChange = (event) => {
     setFontSize(event.target.value === "" ? "" : Number(event.target.value));
   };
@@ -380,9 +405,14 @@ export default function Home() {
                 }}
                 horizontal
               >
-                <Grid item>
-                  {fontName}
-
+                <Grid
+                  sx={{
+                    fontFamily: fontName,
+                    display: "flex",
+                    whiteSpace: "nowrap",
+                  }}
+                  item
+                >
                   <span onClick={() => handleToggleFavaritFont(fontName)}>
                     {favoriteFontList.includes(fontName) ? (
                       <StarIcon />
@@ -390,39 +420,57 @@ export default function Home() {
                       <StarBorderIcon />
                     )}
                   </span>
-                </Grid>
-                <Box sx={{ display: "flex", height: "56px" }}>
-                  <FormControl
-                    variant="standard"
-                    sx={{
-                      minWidth: 120,
-                    }}
-                  >
-                    <InputLabel id="demo-simple-select-standard-label">
-                      FontWeight
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      value={overwriteState[fontName]?.fontWeight}
-                      onChange={handleFontStyle(fontName, "fontWeight")}
-                      label="FontWeight"
+                  <span style={{ margin: "0px 16px" }}>{fontName}</span>
+                  <Box sx={{ height: "26px", minHeight: "auto" }}>
+                    <FormControl
+                      variant="standard"
+                      sx={{
+                        minWidth: 120,
+                      }}
                     >
-                      <MenuItem value="">
-                        <em>None</em>
-                      </MenuItem>
-                      <MenuItem value={"100"}>100</MenuItem>
-                      <MenuItem value={"200"}>200</MenuItem>
-                      <MenuItem value={"300"}>300</MenuItem>
-                      <MenuItem value={"400"}>400</MenuItem>
-                      <MenuItem value={"500"}>500</MenuItem>
-                      <MenuItem value={"600"}>600</MenuItem>
-                      <MenuItem value={"700"}>700</MenuItem>
-                      <MenuItem value={"800"}>800</MenuItem>
-                      <MenuItem value={"900"}>900</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
+                      <InputLabel id="demo-simple-select-standard-label">
+                        FontWeight
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        value={overwriteState[fontName]?.fontWeight}
+                        onChange={handleFontStyle(fontName, "fontWeight")}
+                        label="FontWeight"
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        {fontWeightList.map((fontWeight) => {
+                          return (
+                            <MenuItem
+                              key={fontWeight}
+                              sx={{
+                                fontFamily: fontName,
+                                fontWeight: fontWeight.replace("i", ""),
+                                ...(fontWeight.at(0) === "i"
+                                  ? { fontStyle: "italic" }
+                                  : {}),
+                              }}
+                              value={fontWeight}
+                            >
+                              {fontWeight}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <Slider
+                    value={
+                      typeof overwriteState[fontName]?.fontSize === "number"
+                        ? overwriteState[fontName]?.fontSize
+                        : 16
+                    }
+                    onChange={handleFontStyle(fontName, "fontSize")}
+                    aria-labelledby="input-slider"
+                  />
+                </Grid>
                 <Box
                   sx={{
                     display: "flex",
@@ -430,17 +478,7 @@ export default function Home() {
                     minWidth: 150,
                   }}
                 >
-                  <Grid item xs>
-                    <Slider
-                      value={
-                        typeof overwriteState[fontName]?.fontSize === "number"
-                          ? overwriteState[fontName]?.fontSize
-                          : 16
-                      }
-                      onChange={handleFontStyle(fontName, "fontSize")}
-                      aria-labelledby="input-slider"
-                    />
-                  </Grid>
+                  <Grid item xs></Grid>
                 </Box>
                 {/* <Canvas
                   draw={draw(
