@@ -7,7 +7,7 @@ export default function App() {
   return (
     <Router>
       <div>
-        <nav>
+        {/* <nav>
           <ul>
             {Object.keys(APP_ROUTES).map((path) => (
               <li key={path + "-link"}>
@@ -15,7 +15,7 @@ export default function App() {
               </li>
             ))}
           </ul>
-        </nav>
+        </nav> */}
         <Routes>
           {Object.keys(APP_ROUTES).map((path) => {
             const Component = APP_ROUTES[path].component;
