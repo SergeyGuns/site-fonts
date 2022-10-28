@@ -50,8 +50,7 @@ export default function Home() {
   const CATEGORIES_LIST = ["Sans", "Serif", "Slab"];
 
   const FISH_TEXT = {
-    init: "aA",
-    Cities: "Moscow",
+    Cities: "Moscow, New York, Tokio",
     Excerts: "Тургенева не удовлетворяют ни отцы, ни дети.",
     Names: "Петр Иванович Поляков",
   };
@@ -166,7 +165,7 @@ export default function Home() {
     setPersonality(value);
   };
 
-  const [youText, setYouText] = React.useState(FISH_TEXT.init);
+  const [youText, setYouText] = React.useState("Aa Bb fd AT AV");
   const handleYouTextChange = ({ target: { value } }) => {
     setYouText(value);
   };
@@ -176,9 +175,8 @@ export default function Home() {
     setAlignment(value);
   };
 
-  const [fishText, setFishText] = React.useState("");
   const handleFishTextChange = (_, value) => {
-    setFishText(value);
+    setYouText(FISH_TEXT[value]);
   };
 
   const [fontSize, setFontSize] = React.useState(80);
@@ -225,6 +223,7 @@ export default function Home() {
                   value={youText}
                   onChange={handleYouTextChange}
                   id="input-with-sx"
+                  multiline
                   label="You Text"
                   variant="standard"
                 />
@@ -327,20 +326,16 @@ export default function Home() {
               <Box sx={{ display: "flex", alignItems: "flex-end" }}>
                 <StyledToggleButtonGroup
                   size="small"
-                  value={fishText}
+                  value={youText}
                   exclusive
                   onChange={handleFishTextChange}
                   aria-label="text alignment"
                 >
-                  <ToggleButton value="left" aria-label="left aligned">
-                    Cities
-                  </ToggleButton>
-                  <ToggleButton value="center" aria-label="centered">
-                    Excerts
-                  </ToggleButton>
-                  <ToggleButton value="right" aria-label="right aligned">
-                    Names
-                  </ToggleButton>
+                  {Object.keys(FISH_TEXT).map((variant) => (
+                    <ToggleButton key={variant} value={variant}>
+                      {variant}
+                    </ToggleButton>
+                  ))}
                 </StyledToggleButtonGroup>
               </Box>
             </Box>
@@ -393,17 +388,16 @@ export default function Home() {
         </Grid>
       </Grid>
 
-      <Grid xs={12} style={{ width: "100%", transform: "translate3d(0,0,0)" }}>
+      <Grid style={{ width: "100%", transform: "translate3d(0,0,0)" }}>
         {filter(fontList, [fontSerchNameCondition(search)]).map((fontName) => {
           return (
-            <Grid key={fontName} xs={12} item>
+            <Grid key={fontName} item>
               <Paper
                 style={{
                   padding: "16px",
                   minHeight: "250px",
                   margin: "16px 0 16px 0",
                 }}
-                horizontal
               >
                 <Grid
                   sx={{
@@ -434,7 +428,7 @@ export default function Home() {
                       <Select
                         labelId="demo-simple-select-standard-label"
                         id="demo-simple-select-standard"
-                        value={overwriteState[fontName]?.fontWeight}
+                        value={overwriteState[fontName]?.fontWeight || ""}
                         onChange={handleFontStyle(fontName, "fontWeight")}
                         label="FontWeight"
                       >
@@ -491,7 +485,6 @@ export default function Home() {
                   key={fontName}
                   style={{
                     transition: "font-size 100ms",
-                    transform: "translate3d(0, 0, 0);",
                     fontFamily: fontName,
                     fontSize: fontSize + "px",
                     willChange: "font-size",
